@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3D Calculator | XOBE DEVELOPMENT</title>
+  <style>
+    :root {
+      --bg: #0e1117;
+      --calc-bg: #1e222a;
+      --btn-bg: #2d333b;
+      --btn-color: #f4f4f5;
+      --accent: #00e5ff;
+      --shadow: rgba(0, 0, 0, 0.6);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: var(--btn-color);
+      overflow: hidden;
+    }
+
+    .scene {
+      perspective: 1200px;
+    }
+
+    .calculator {
+      width: 340px;
+      background: var(--calc-bg);
+      border-radius: 20px;
+      padding: 1.25rem;
+      box-shadow: 0 20px 40px -10px var(--shadow);
+      transform: rotateX(12deg) rotateY(-18deg);
+      transition: transform 0.6s ease;
+    }
+
+    .calculator:hover {
+      transform: rotateX(0deg) rotateY(0deg) translateY(-10px);
+    }
+
+    .display {
+      width: 100%;
+      height: 70px;
+      background: #000000c2;
+      color: var(--accent);
+      border: none;
+      border-radius: 12px;
+      font-size: 2rem;
+      text-align: right;
+      padding: 0.5rem 1rem;
+      outline: none;
+      margin-bottom: 1rem;
+    }
+
+    .keys {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.75rem;
+    }
+
+    button {
+      appearance: none;
+      border: none;
+      border-radius: 12px;
+      height: 60px;
+      font-size: 1.25rem;
+      font-weight: 600;
+      background: var(--btn-bg);
+      color: var(--btn-color);
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 5px 12px -3px var(--shadow);
+    }
+
+    button:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 6px -2px var(--shadow);
+    }
+
+    .operator {
+      background: var(--accent);
+      color: #000;
+    }
+
+    .wide {
+      grid-column: span 2;
+    }
+
+    footer {
+      margin-top: 1rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: #8b949e;
+    }
+
+    @media (max-width: 400px) {
+      .calculator {
+        width: 90vw;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="scene">
+    <div class="calculator" role="application" aria-label="3D Calculator">
+      <input type="text" class="display" id="display" value="0" readonly>
+      <div class="keys">
+        <button class="operator" data-action="clear">C</button>
+        <button class="operator" data-action="delete">⌫</button>
+        <button class="operator" data-action="toggle-sign">±</button>
+        <button class="operator" data-value="/">÷</button>
+
+        <button data-value="7">7</button>
+        <button data-value="8">8</button>
+        <button data-value="9">9</button>
+        <button class="operator" data-value="*">×</button>
+
+        <button data-value="4">4</button>
+        <button data-value="5">5</button>
+        <button data-value="6">6</button>
+        <button class="operator" data-value="-">−</button>
+
+        <button data-value="1">1</button>
+        <button data-value="2">2</button>
+        <button data-value="3">3</button>
+        <button class="operator" data-value="+">+</button>
+
+        <button class="operator" data-action="square">x²</button>
+        <button class="operator" data-action="sqrt">√x</button>
+        <button class="operator" data-action="inverse">1/x</button>
+        <button class="operator" data-action="ans">ANS</button>
+
+        <button class="wide" data-value="0">0</button>
+        <button data-value=".">.</button>
+        <button class="operator" data-action="calculate">=</button>
+      </div>
+    </div>
+    <footer>© 2025 XOBE DEVELOPMENT</footer>
+  </div>
+
+  <script>
+    const display = document.getElementById('display');
+    const keys = document.querySelector('.keys');
+    let expression = '';
+    let lastAnswer = '';
+
+    keys.addEventListener('click', (e) => {
+      if (!e.target.matches('button')) return;
+      const btn = e.target;
+      const action = btn.dataset.action;
+      const value = btn.dataset.value;
+
+      switch (action) {
+        case 'clear':
+          expression = '';
+          updateDisplay('0');
+          break;
+        case 'delete':
+          expression = expression.slice(0, -1);
+          updateDisplay(expression || '0');
+          break;
+        case 'calculate':
+          try {
+            const result = Function('return ' + sanitize(expression))();
+            lastAnswer = result.toString();
+            expression = result.toString();
+            updateDisplay(expression);
+          } catch (err) {
+            updateDisplay('Error');
+            expression = '';
+          }
+          break;
+        case 'square':
+          try {
+            const result = Math.pow(eval(expression || '0'), 2);
+            expression = result.toString();
+            updateDisplay(expression);
+          } catch (err) {
+            updateDisplay('Error');
+          }
+          break;
+        case 'sqrt':
+          try {
+            const result = Math.sqrt(eval(expression || '0'));
+            expression = result.toString();
+            updateDisplay(expression);
+          } catch (err) {
+            updateDisplay('Error');
+          }
+          break;
+        case 'inverse':
+          try {
+            const result = 1 / eval(expression || '1');
+            expression = result.toString();
+            updateDisplay(expression);
+          } catch (err) {
+            updateDisplay('Error');
+          }
+          break;
+        case 'toggle-sign':
+          try {
+            expression = (parseFloat(expression) * -1).toString();
+            updateDisplay(expression);
+          } catch (err) {
+            updateDisplay('Error');
+          }
+          break;
+        case 'ans':
+          expression += lastAnswer;
+          updateDisplay(expression);
+          break;
+        default:
+          expression += value;
+          updateDisplay(expression);
+      }
+    });
+
+    function updateDisplay(text) {
+      display.value = text;
+    }
+
+    function sanitize(expr) {
+      if (/^[0-9+\-*/%.]+$/.test(expr)) {
+        return expr;
+      }
+      throw new Error('Invalid Expression');
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key.match(/[0-9+\-*/%.]/)) {
+        expression += e.key;
+        updateDisplay(expression);
+      } else if (e.key === 'Enter') {
+        keys.querySelector('[data-action="calculate"]').click();
+      } else if (e.key === 'Backspace') {
+        keys.querySelector('[data-action="delete"]').click();
+      } else if (e.key.toLowerCase() === 'c') {
+        keys.querySelector('[data-action="clear"]').click();
+      }
+    });
+  </script>
+</body>
+</html>
