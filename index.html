@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
@@ -12,6 +12,8 @@
       --btn-color: #f4f4f5;
       --accent: #00e5ff;
       --shadow: rgba(0, 0, 0, 0.6);
+      --main-gradient: linear-gradient(135deg, #00e5ff 0%, #ff00cc 100%);
+      --main-bg: linear-gradient(135deg, #232526 0%, #414345 100%);
     }
 
     * {
@@ -26,11 +28,100 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      background: var(--main-bg);
       color: var(--btn-color);
       overflow: hidden;
     }
 
+    /* MENU UTAMA */
+    .main-menu {
+      background: var(--main-gradient);
+      box-shadow: 0 12px 40px -10px var(--shadow);
+      border-radius: 24px;
+      padding: 2.5rem 2rem 2rem 2rem;
+      min-width: 340px;
+      max-width: 95vw;
+      text-align: center;
+      animation: fadeIn 1s;
+      position: relative;
+    }
+    .main-menu h1 {
+      font-size: 2.3rem;
+      font-weight: bold;
+      background: linear-gradient(90deg, #fff 30%, #00e5ff 60%, #ff00cc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+      letter-spacing: 1px;
+    }
+    .main-menu p {
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+      color: #e0e0e0;
+      text-shadow: 0 2px 8px #0004;
+    }
+    .main-menu .start-btn {
+      background: linear-gradient(90deg, #00e5ff 0%, #ff00cc 100%);
+      color: #fff;
+      border: none;
+      border-radius: 16px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      padding: 0.9rem 2.2rem;
+      margin-bottom: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 6px 18px -4px #0006;
+      transition: background 0.3s, transform 0.2s;
+      outline: none;
+      letter-spacing: 1px;
+    }
+    .main-menu .start-btn:hover {
+      background: linear-gradient(90deg, #ff00cc 0%, #00e5ff 100%);
+      transform: translateY(-2px) scale(1.04);
+    }
+    .main-menu .credits {
+      margin-top: 1.5rem;
+      font-size: 0.98rem;
+      color: #fff;
+      background: rgba(0,0,0,0.18);
+      border-radius: 12px;
+      padding: 0.7rem 1rem 0.6rem 1rem;
+      box-shadow: 0 2px 8px -2px #0003;
+      line-height: 1.6;
+    }
+    .main-menu .credits strong {
+      color: #00e5ff;
+      font-weight: bold;
+    }
+    .main-menu .credits .mit {
+      color: #ff00cc;
+      font-weight: bold;
+      font-size: 1.08em;
+      letter-spacing: 1px;
+    }
+    .main-menu .logo {
+      width: 60px;
+      height: 60px;
+      margin-bottom: 1.2rem;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #00e5ff 0%, #ff00cc 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      color: #fff;
+      box-shadow: 0 4px 16px -4px #0005;
+      margin-left: auto;
+      margin-right: auto;
+      user-select: none;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px);}
+      to { opacity: 1; transform: none;}
+    }
+
+    /* KALKULATOR */
     .scene {
       perspective: 1200px;
     }
@@ -43,6 +134,7 @@
       box-shadow: 0 20px 40px -10px var(--shadow);
       transform: rotateX(12deg) rotateY(-18deg);
       transition: transform 0.6s ease;
+      animation: fadeIn 0.8s;
     }
 
     .calculator:hover {
@@ -97,6 +189,27 @@
       grid-column: span 2;
     }
 
+    .back-btn {
+      display: block;
+      margin: 0 auto 1.2rem auto;
+      background: linear-gradient(90deg, #ff00cc 0%, #00e5ff 100%);
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      font-size: 1.08rem;
+      font-weight: bold;
+      padding: 0.7rem 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px -4px #0005;
+      transition: background 0.3s, transform 0.2s;
+      outline: none;
+      letter-spacing: 1px;
+    }
+    .back-btn:hover {
+      background: linear-gradient(90deg, #00e5ff 0%, #ff00cc 100%);
+      transform: translateY(-2px) scale(1.04);
+    }
+
     footer {
       margin-top: 1rem;
       text-align: center;
@@ -108,11 +221,34 @@
       .calculator {
         width: 90vw;
       }
+      .main-menu {
+        min-width: 0;
+        width: 95vw;
+        padding: 1.2rem 0.5rem 1.2rem 0.5rem;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="scene">
+  <!-- MENU UTAMA -->
+  <div class="main-menu" id="mainMenu">
+    <div class="logo">🧮</div>
+    <h1>3D Calculator</h1>
+    <p>Kalkulator modern dengan efek 3D, fitur lengkap, dan tampilan stylish.<br>
+      <span style="color:#fff;font-weight:bold;">Powered by XOBE DEVELOPMENT</span>
+    </p>
+    <button class="start-btn" id="startCalcBtn">Mulai Kalkulator</button>
+    <div class="credits">
+      <div><span class="mit">Lisensi MIT</span></div>
+      <div>© 2025 <strong>XOBE DEVELOPMENT</strong></div>
+      <div>Design & Code by <strong>XOBE DEVELOPMENT</strong></div>
+      <div style="font-size:0.93em;margin-top:0.5em;color:#e0e0e0;">Bebas digunakan & dimodifikasi untuk siapa saja.</div>
+    </div>
+  </div>
+
+  <!-- KALKULATOR -->
+  <div class="scene" id="calcScene" style="display:none;">
+    <button class="back-btn" id="backMenuBtn">← Kembali ke Menu</button>
     <div class="calculator" role="application" aria-label="3D Calculator">
       <input type="text" class="display" id="display" value="0" readonly>
       <div class="keys">
@@ -150,6 +286,22 @@
   </div>
 
   <script>
+    // Menu utama <-> Kalkulator
+    const mainMenu = document.getElementById('mainMenu');
+    const calcScene = document.getElementById('calcScene');
+    const startCalcBtn = document.getElementById('startCalcBtn');
+    const backMenuBtn = document.getElementById('backMenuBtn');
+
+    startCalcBtn.onclick = () => {
+      mainMenu.style.display = 'none';
+      calcScene.style.display = 'block';
+    };
+    backMenuBtn.onclick = () => {
+      calcScene.style.display = 'none';
+      mainMenu.style.display = 'block';
+    };
+
+    // Kalkulator logic
     const display = document.getElementById('display');
     const keys = document.querySelector('.keys');
     let expression = '';
@@ -238,6 +390,7 @@
     }
 
     document.addEventListener('keydown', (e) => {
+      if (calcScene.style.display !== 'block') return;
       if (e.key.match(/[0-9+\-*/%.]/)) {
         expression += e.key;
         updateDisplay(expression);
