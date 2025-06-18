@@ -14,25 +14,72 @@
       --shadow: rgba(0, 0, 0, 0.6);
       --main-gradient: linear-gradient(135deg, #00e5ff 0%, #ff00cc 100%);
       --main-bg: linear-gradient(135deg, #232526 0%, #414345 100%);
+      --display-bg: #000000c2;
+      --display-color: var(--accent);
+      --operator-bg: var(--accent);
+      --operator-color: #000;
+      --toggle-bg: #232526;
+      --toggle-icon: #00e5ff;
     }
-
+    body.light {
+      --bg: #f6f7fb;
+      --calc-bg: #fff;
+      --btn-bg: #f0f1f6;
+      --btn-color: #232526;
+      --accent: #ff00cc;
+      --shadow: rgba(0,0,0,0.08);
+      --main-gradient: linear-gradient(135deg, #ff00cc 0%, #00e5ff 100%);
+      --main-bg: linear-gradient(135deg, #e3e6ee 0%, #f6f7fb 100%);
+      --display-bg: #f6f7fb;
+      --display-color: #ff00cc;
+      --operator-bg: #00e5ff;
+      --operator-color: #fff;
+      --toggle-bg: #fff;
+      --toggle-icon: #ff00cc;
+    }
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     }
-
     body {
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       background: var(--main-bg);
       color: var(--btn-color);
+      transition: background 0.5s;
       overflow: hidden;
     }
-
+    /* Toggle Theme Button */
+    .theme-toggle {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      z-index: 10;
+      background: var(--toggle-bg);
+      border: none;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px -2px var(--shadow);
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .theme-toggle svg {
+      width: 26px;
+      height: 26px;
+      fill: var(--toggle-icon);
+      transition: fill 0.3s;
+    }
+    .theme-toggle:active {
+      transform: scale(0.95);
+    }
     /* MENU UTAMA */
     .main-menu {
       background: var(--main-gradient);
@@ -61,24 +108,44 @@
       color: #e0e0e0;
       text-shadow: 0 2px 8px #0004;
     }
-    .main-menu .start-btn {
+    .menu-btns {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      animation: floatIn 1.2s cubic-bezier(.4,2,.3,1);
+    }
+    .start-btn, .bug-btn {
       background: linear-gradient(90deg, #00e5ff 0%, #ff00cc 100%);
       color: #fff;
       border: none;
       border-radius: 16px;
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       font-weight: bold;
-      padding: 0.9rem 2.2rem;
-      margin-bottom: 1.5rem;
+      padding: 0.85rem 2.2rem;
       cursor: pointer;
-      box-shadow: 0 6px 18px -4px #0006;
-      transition: background 0.3s, transform 0.2s;
+      box-shadow: 0 6px 18px -4px #0006, 0 0px 0px 0px #00e5ff44;
+      transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
       outline: none;
       letter-spacing: 1px;
+      position: relative;
+      overflow: hidden;
     }
-    .main-menu .start-btn:hover {
+    .start-btn:hover, .bug-btn:hover {
       background: linear-gradient(90deg, #ff00cc 0%, #00e5ff 100%);
-      transform: translateY(-2px) scale(1.04);
+      transform: translateY(-2px) scale(1.04) rotate(-1deg);
+      box-shadow: 0 12px 32px -8px #00e5ff55, 0 0px 0px 4px #ff00cc33;
+    }
+    .bug-btn {
+      background: linear-gradient(90deg, #ff5e62 0%, #ff9966 100%);
+      color: #fff;
+      font-size: 1.08rem;
+      box-shadow: 0 4px 16px -6px #ff5e6244;
+    }
+    .bug-btn:hover {
+      background: linear-gradient(90deg, #ff9966 0%, #ff5e62 100%);
+      box-shadow: 0 8px 24px -8px #ff5e62aa, 0 0px 0px 4px #ff996633;
+      color: #fff;
     }
     .main-menu .credits {
       margin-top: 1.5rem;
@@ -120,47 +187,51 @@
       from { opacity: 0; transform: translateY(30px);}
       to { opacity: 1; transform: none;}
     }
+    @keyframes floatIn {
+      from { opacity: 0; transform: translateY(40px) scale(0.97);}
+      to { opacity: 1; transform: none;}
+    }
 
     /* KALKULATOR */
     .scene {
       perspective: 1200px;
+      position: relative;
     }
-
     .calculator {
       width: 340px;
       background: var(--calc-bg);
       border-radius: 20px;
-      padding: 1.25rem;
+      padding: 1.25rem 1.25rem 1.5rem 1.25rem;
       box-shadow: 0 20px 40px -10px var(--shadow);
       transform: rotateX(12deg) rotateY(-18deg);
-      transition: transform 0.6s ease;
-      animation: fadeIn 0.8s;
+      transition: transform 0.6s cubic-bezier(.4,2,.3,1), background 0.5s;
+      animation: fadeIn 0.8s, floatCalc 2.5s cubic-bezier(.4,2,.3,1) infinite alternate;
+      position: relative;
     }
-
     .calculator:hover {
       transform: rotateX(0deg) rotateY(0deg) translateY(-10px);
     }
-
     .display {
       width: 100%;
       height: 70px;
-      background: #000000c2;
-      color: var(--accent);
+      background: var(--display-bg);
+      color: var(--display-color);
       border: none;
       border-radius: 12px;
-      font-size: 2rem;
+      font-size: 2.1rem;
       text-align: right;
       padding: 0.5rem 1rem;
       outline: none;
-      margin-bottom: 1rem;
+      margin-bottom: 1.1rem;
+      box-shadow: 0 2px 8px -2px var(--shadow);
+      letter-spacing: 1px;
+      transition: background 0.5s, color 0.5s;
     }
-
     .keys {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 0.75rem;
     }
-
     button {
       appearance: none;
       border: none;
@@ -171,24 +242,36 @@
       background: var(--btn-bg);
       color: var(--btn-color);
       cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      transition: 
+        transform 0.18s cubic-bezier(.4,2,.3,1), 
+        box-shadow 0.18s, 
+        background 0.4s, 
+        color 0.4s;
       box-shadow: 0 5px 12px -3px var(--shadow);
+      outline: none;
     }
-
     button:active {
-      transform: translateY(2px);
+      transform: translateY(2px) scale(0.98);
       box-shadow: 0 2px 6px -2px var(--shadow);
     }
-
-    .operator {
+    button:hover {
       background: var(--accent);
-      color: #000;
+      color: #fff;
+      box-shadow: 0 8px 18px -6px var(--shadow);
     }
-
+    .operator {
+      background: var(--operator-bg);
+      color: var(--operator-color);
+      font-weight: bold;
+      transition: background 0.4s, color 0.4s;
+    }
+    .operator:hover {
+      background: #fff;
+      color: var(--accent);
+    }
     .wide {
       grid-column: span 2;
     }
-
     .back-btn {
       display: block;
       margin: 0 auto 1.2rem auto;
@@ -209,14 +292,12 @@
       background: linear-gradient(90deg, #00e5ff 0%, #ff00cc 100%);
       transform: translateY(-2px) scale(1.04);
     }
-
     footer {
       margin-top: 1rem;
       text-align: center;
       font-size: 0.85rem;
       color: #8b949e;
     }
-
     @media (max-width: 400px) {
       .calculator {
         width: 90vw;
@@ -226,10 +307,20 @@
         width: 95vw;
         padding: 1.2rem 0.5rem 1.2rem 0.5rem;
       }
+      .theme-toggle {
+        top: 12px;
+        right: 12px;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- Toggle Theme Button -->
+  <button class="theme-toggle" id="themeToggleBtn" title="Ganti Tema">
+    <svg id="themeIcon" viewBox="0 0 24 24">
+      <path d="M12 3a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0V4a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0v-1a1 1 0 0 1 1-1zm9-7a1 1 0 0 1-1 1h-1a1 1 0 1 1 0-2h1a1 1 0 0 1 1 1zm-16 0a1 1 0 0 1-1 1H3a1 1 0 1 1 0-2h1a1 1 0 0 1 1 1zm12.07-6.07a1 1 0 0 1 1.41 1.41l-.71.71a1 1 0 1 1-1.41-1.41l.71-.71zm-10.14 0a1 1 0 0 1 1.41 0l.71.71a1 1 0 1 1-1.41 1.41l-.71-.71a1 1 0 0 1 0-1.41zm12.02 12.02a1 1 0 0 1 0 1.41l-.71.71a1 1 0 1 1-1.41-1.41l.71-.71a1 1 0 0 1 1.41 0zm-10.14 0a1 1 0 0 1 1.41 1.41l-.71.71a1 1 0 1 1-1.41-1.41l.71-.71zm6.07-10.95a5 5 0 1 1 0 10 5 5 0 0 1 0-10z"/>
+    </svg>
+  </button>
   <!-- MENU UTAMA -->
   <div class="main-menu" id="mainMenu">
     <div class="logo">🧮</div>
@@ -237,7 +328,10 @@
     <p>Kalkulator modern dengan efek 3D, fitur lengkap, dan tampilan stylish.<br>
       <span style="color:#fff;font-weight:bold;">Powered by XOBE DEVELOPMENT</span>
     </p>
-    <button class="start-btn" id="startCalcBtn">Mulai Kalkulator</button>
+    <div class="menu-btns">
+      <button class="start-btn" id="startCalcBtn">Mulai Kalkulator</button>
+      <button class="bug-btn" id="bugBtn">🐞 Lapor Bug</button>
+    </div>
     <div class="credits">
       <div><span class="mit">Lisensi MIT</span></div>
       <div>© 2025 <strong>XOBE DEVELOPMENT</strong></div>
@@ -285,6 +379,23 @@
     <footer>© 2025 XOBE DEVELOPMENT</footer>
   </div>
 
+  <!-- Modal Lapor Bug -->
+  <div id="bugModal" style="display:none;position:fixed;z-index:999;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.45);align-items:center;justify-content:center;">
+    <div style="background:#fff;max-width:350px;width:90vw;padding:2rem 1.2rem 1.2rem 1.2rem;border-radius:18px;box-shadow:0 8px 32px #0005;position:relative;">
+      <button id="closeBugModal" style="position:absolute;top:10px;right:16px;background:none;border:none;font-size:1.5em;cursor:pointer;color:#ff00cc;">×</button>
+      <h2 style="color:#00e5ff;margin-bottom:0.7em;">Lapor Bug</h2>
+      <label for="bugDesc" style="font-weight:bold;">Deskripsi Bug:</label>
+      <textarea id="bugDesc" rows="4" style="width:100%;margin:8px 0 12px 0;padding:8px;border-radius:8px;border:1px solid #ccc;resize:vertical;"></textarea>
+      <label for="bugDevice" style="font-weight:bold;">Perangkat/Browser:</label>
+      <input id="bugDevice" type="text" style="width:100%;margin:8px 0 16px 0;padding:8px;border-radius:8px;border:1px solid #ccc;" placeholder="Contoh: Windows 11 / Chrome" />
+      <button id="sendBugBtn" style="background:linear-gradient(90deg,#00e5ff 0%,#ff00cc 100%);color:#fff;font-weight:bold;border:none;border-radius:12px;padding:0.7em 1.5em;font-size:1.1em;cursor:pointer;box-shadow:0 4px 12px -4px #00e5ff55;">Kirim</button>
+      <div style="font-size:0.95em;color:#888;margin-top:10px;">
+        Setelah klik "Kirim", email akan terbuka di aplikasi email Anda.<br>
+        Jika tidak muncul, aktifkan Gmail sebagai handler mailto di browser, atau copy-paste laporan ke email: <b>xobedev@gmail.com</b>
+      </div>
+    </div>
+  </div>
+
   <script>
     // Menu utama <-> Kalkulator
     const mainMenu = document.getElementById('mainMenu');
@@ -312,6 +423,11 @@
       const btn = e.target;
       const action = btn.dataset.action;
       const value = btn.dataset.value;
+
+      // Batasi hanya 10 digit angka (tanpa menghitung operator dan titik)
+      function countDigits(str) {
+        return (str.match(/\d/g) || []).length;
+      }
 
       switch (action) {
         case 'clear':
@@ -369,10 +485,14 @@
           }
           break;
         case 'ans':
+          // Batasi penambahan angka dari ANS jika melebihi 10 digit
+          if (countDigits(expression + lastAnswer) > 10) return;
           expression += lastAnswer;
           updateDisplay(expression);
           break;
         default:
+          // Batasi hanya 10 digit angka
+          if (value && /\d/.test(value) && countDigits(expression) >= 10) return;
           expression += value;
           updateDisplay(expression);
       }
@@ -402,6 +522,81 @@
         keys.querySelector('[data-action="clear"]').click();
       }
     });
+
+    // Tema
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    const themeIcon = document.getElementById('themeIcon');
+
+    themeToggleBtn.onclick = () => {
+      document.body.classList.toggle('light');
+      updateThemeIcon();
+    };
+
+    function updateThemeIcon() {
+      if (document.body.classList.contains('light')) {
+        themeIcon.setAttribute('d', 'M12 3a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0V4a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0v-1a1 1 0 0 1 1-1zm9-7a1 1 0 0 1-1 1h-1a1 1 0 1 1 0-2h1a1 1 0 0 1 1 1zm-16 0a1 1 0 0 1-1 1H3a1 1 0 1 1 0-2h1a1 1 0 0 1 1 1zm12.07-6.07a1 1 0 0 1 1.41 1.41l-.71.71a1 1 0 1 1-1.41-1.41l.71-.71zm-10.14 0a1 1 0 0 1 1.41 0l.71.71a1 1 0 1 1-1.41 1.41l-.71-.71a1 1 0 0 1 0-1.41zm12.02 12.02a1 1 0 0 1 0 1.41l-.71.71a1 1 0 1 1-1.41-1.41l.71-.71a1 1 0 0 1 1.41 0zm-10.14 0a1 1 0 0 1 1.41 1.41l-.71.71a1 1 0 1 1-1.41-1.41l.71-.71zm6.07-10.95a5 5 0 1 1 0 10 5 5 0 0 1 0-10z');
+      } else {
+        themeIcon.setAttribute('d', 'M12 2a10 10 0 1 0 9.95 11.85A7.5 7.5 0 0 1 12 19a7.5 7.5 0 0 1-9.95-5.15A10 10 0 0 0 12 2zm0 2a8 8 0 0 1 7.94 6.66A7.5 7.5 0 0 1 12 17a7.5 7.5 0 0 1-7.94-6.34A8 8 0 0 1 12 4z');
+      }
+    }
+
+    updateThemeIcon();
+
+    // Tombol Lapor Bug
+    document.getElementById('bugBtn').onclick = function() {
+      const subject = encodeURIComponent('Laporan Bug 3D Calculator');
+      const body = encodeURIComponent(
+        'Deskripsikan bug yang Anda temukan di bawah ini:\n\n' +
+        'Langkah mereproduksi bug:\n1. \n2. \n3. \n\n' +
+        'Perangkat/Browser: \n' +
+        'Screenshot (jika ada): \n\n' +
+        'Terima kasih!'
+      );
+      window.location.href = `mailto:xobedev@gmail.com?subject=${subject}&body=${body}`;
+    };
+
+    // Modal Lapor Bug
+    const bugModal = document.getElementById('bugModal');
+    const closeBugModal = document.getElementById('closeBugModal');
+    const sendBugBtn = document.getElementById('sendBugBtn');
+    const bugDesc = document.getElementById('bugDesc');
+    const bugDevice = document.getElementById('bugDevice');
+
+    document.getElementById('bugBtn').onclick = () => {
+      bugModal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    };
+
+    closeBugModal.onclick = () => {
+      bugModal.style.display = 'none';
+      document.body.style.overflow = 'auto';
+    };
+
+    window.onclick = (event) => {
+      if (event.target === bugModal) {
+        bugModal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }
+    };
+
+    sendBugBtn.onclick = () => {
+      const description = bugDesc.value.trim();
+      const deviceInfo = bugDevice.value.trim();
+
+      if (!description) {
+        alert('Deskripsi bug tidak boleh kosong!');
+        return;
+      }
+
+      const subject = encodeURIComponent('Laporan Bug dari Kalkulator 3D');
+      const body = encodeURIComponent(
+        `Deskripsi Bug:\n${description}\n\n` +
+        `Perangkat/Browser: ${deviceInfo}\n\n` +
+        'Terima kasih atas laporannya!'
+      );
+
+      window.location.href = `mailto:xobedev@gmail.com?subject=${subject}&body=${body}`;
+    };
   </script>
 </body>
 </html>
